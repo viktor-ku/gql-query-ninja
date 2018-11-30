@@ -8,10 +8,13 @@ interface IVar {
   nullable?: boolean
 }
 
+type IFields = IDict<boolean | Query | IDict>
+type IVars = IDict<IVar>
+
 interface IState {
   operation: string
-  vars: IDict<IVar> | null
-  fields: IDict | null
+  vars?: IVars
+  fields?: IFields
 }
 
 export class Query {
@@ -21,8 +24,6 @@ export class Query {
     if (typeof opOrOther === 'string') {
       this.state = [{
         operation: opOrOther,
-        vars: null,
-        fields: null,
       }]
     } else if (opOrOther instanceof Object) {
       this.state = opOrOther.state
@@ -36,12 +37,12 @@ export class Query {
     return this.toString()
   }
 
-  public vars(vars: IDict<IVar>): Query {
+  public vars(vars: IVars): Query {
     last(this.state).vars = vars
     return this
   }
 
-  public fields(fields: IDict): Query {
+  public fields(fields: IFields): Query {
     last(this.state).fields = fields
     return this
   }
