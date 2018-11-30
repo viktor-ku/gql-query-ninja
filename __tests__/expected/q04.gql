@@ -1,0 +1,12 @@
+query (
+  $taskId: String!
+) {
+  tasks (
+    taskId: $taskId
+  ) {
+    id
+    comments {
+      id
+    }
+  }
+}

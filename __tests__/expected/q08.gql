@@ -1,0 +1,16 @@
+query (
+  $taskId: String!
+) {
+  tasks (
+    taskId: $taskId
+  ) {
+    id
+    name
+    desc
+  }
+  users {
+    id
+    name
+    email
+  }
+}

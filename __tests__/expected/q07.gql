@@ -1,0 +1,12 @@
+query {
+  tasks {
+    id
+    name
+    desc
+  }
+  users {
+    id
+    name
+    email
+  }
+}

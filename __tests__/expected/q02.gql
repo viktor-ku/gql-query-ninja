@@ -1,0 +1,17 @@
+query {
+  tasks {
+    id
+    name
+    desc
+    comments {
+      id
+      text
+      createdAt
+      author {
+        id
+        name
+        email
+      }
+    }
+  }
+}

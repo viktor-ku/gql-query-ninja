@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "esnext",
+    "module": "commonjs",
+    "strict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "declarationDir": "types",
+    "declaration": true
+  },
+  "exclude": [
+    "node_modules",
+    "__tests__"
+  ],
+}

@@ -1,0 +1,19 @@
+query (
+  $commentId: String!
+) {
+  tasks {
+    id
+    name
+    desc
+    comments (
+      commentId: $commentId
+    ) {
+      id
+      text
+      author {
+        id
+        name
+      }
+    }
+  }
+}
