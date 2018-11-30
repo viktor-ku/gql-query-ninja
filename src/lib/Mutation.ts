@@ -1,6 +1,6 @@
-import { Action } from './Action'
+import { Query } from './Query'
 
-export class Mutation extends Action {
+export class Mutation extends Query {
   get tag() {
     return 'mutation'
   }

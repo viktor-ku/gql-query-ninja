@@ -1,6 +1,6 @@
-import { Action } from './Action'
+import { Query } from './Query'
 
-export class Subscription extends Action {
+export class Subscription extends Query {
   get tag() {
     return 'subscription'
   }
