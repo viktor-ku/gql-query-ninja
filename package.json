@@ -2,11 +2,10 @@
   "name": "gql-query-ninja",
   "version": "1.0.0",
   "scripts": {
-    "start": "ts-node src/main.ts",
     "test": "jest",
     "build": "tsc",
-    "postinstall": "npm run clean && npm run build",
-    "clean": "rm -rf dist types"
+    "prepack": "npm run clean && npm run build",
+    "clean": "rm -rf types dist"
   },
   "main": "./dist/main.js",
   "types": "./types/main.d.ts",

@@ -1,0 +1,7 @@
+__tests__
+src
+.vscode
+jest.config.js
+tsconfig.json
+tslint.json
+*.tgz
