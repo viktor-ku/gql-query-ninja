@@ -28,7 +28,7 @@ describe('Query', () => {
         name: true,
         desc: true,
       })
-      .toString()
+      .build()
 
     expect(actual).toBe(q.q01)
   })
@@ -40,7 +40,7 @@ describe('Query', () => {
         name: true,
         desc: true,
       })
-      .toString()
+      .build()
 
     expect(`${actual}`).toBe(q.q01)
   })
@@ -62,14 +62,14 @@ describe('Query', () => {
           },
         },
       })
-      .toString()
+      .build()
 
     expect(actual).toBe(q.q02)
   })
 
   test('q03', () => {
     const actual = new Query('tasks')
-      .vars({
+      .args({
         taskId: {
           type: 'String',
         },
@@ -79,7 +79,7 @@ describe('Query', () => {
         name: true,
         desc: true,
       })
-      .toString()
+      .build()
 
     expect(actual).toBe(q.q03)
   })
@@ -93,7 +93,7 @@ describe('Query', () => {
       })
 
     const tasksWithInput = new Query(tasks)
-      .vars({
+      .args({
         taskId: {
           type: 'String',
         },
@@ -107,14 +107,14 @@ describe('Query', () => {
         },
       })
 
-    expect(tasks.toString()).toBe(q.q01)
-    expect(tasksWithInput.toString()).toBe(q.q03)
-    expect(tasksWithNestedReturnAndInput.toString()).toBe(q.q04)
+    expect(tasks.build()).toBe(q.q01)
+    expect(tasksWithInput.build()).toBe(q.q03)
+    expect(tasksWithNestedReturnAndInput.build()).toBe(q.q04)
   })
 
   test('q05 nullable input', () => {
     const actual = new Query('tasks')
-      .vars({
+      .args({
         query: {
           type: 'TaskQuery',
           nullable: true,
@@ -125,7 +125,7 @@ describe('Query', () => {
         name: true,
         desc: true,
       })
-      .toString()
+      .build()
 
     expect(actual).toBe(q.q05)
   })
@@ -147,12 +147,12 @@ describe('Query', () => {
 
     const combined = tasks.merge(users)
 
-    expect(combined.toString()).toBe(q.q07)
+    expect(combined.build()).toBe(q.q07)
   })
 
   test('q08 merging tasks with input and users', () => {
     const tasks = new Query('tasks')
-      .vars({
+      .args({
         taskId: {
           type: 'String',
         },
@@ -172,12 +172,12 @@ describe('Query', () => {
 
     const combined = tasks.merge(users)
 
-    expect(combined.toString()).toBe(q.q08)
+    expect(combined.build()).toBe(q.q08)
   })
 
   test('q09 merging tasks with input and users with input', () => {
     const tasks = new Query('tasks')
-      .vars({
+      .args({
         taskId: {
           type: 'String',
         },
@@ -189,7 +189,7 @@ describe('Query', () => {
       })
 
     const users = new Query('users')
-      .vars({
+      .args({
         userId: {
           type: 'String',
         },
@@ -202,7 +202,7 @@ describe('Query', () => {
 
     const combined = tasks.merge(users)
 
-    expect(combined.toString()).toBe(q.q09)
+    expect(combined.build()).toBe(q.q09)
   })
 
   // test('q10', () => {

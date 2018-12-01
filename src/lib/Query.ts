@@ -13,7 +13,7 @@ type IVars = IDict<IVar>
 
 interface IState {
   operation: string
-  vars?: IVars
+  args?: IVars
   fields?: IFields
 }
 
@@ -34,11 +34,11 @@ export class Query {
   }
 
   public [Symbol.toPrimitive]() {
-    return this.toString()
+    return this.build()
   }
 
-  public vars(vars: IVars): Query {
-    last(this.state).vars = vars
+  public args(args: IVars): Query {
+    last(this.state).args = args
     return this
   }
 
@@ -56,18 +56,18 @@ export class Query {
     return 'query'
   }
 
-  public toString(): string {
+  public build(): string {
     let ret = ''
 
     ret += this.tag
 
-    if (this.state.some((stateItem) => !!stateItem.vars)) {
+    if (this.state.some((stateItem) => !!stateItem.args)) {
       ret += ' (\n'
 
       this.state
-        .filter((stateItem) => !!stateItem.vars)
-        .forEach(({ vars }) => {
-          for (const [key, typeDef] of Object.entries(vars!)) {
+        .filter((stateItem) => !!stateItem.args)
+        .forEach(({ args }) => {
+          for (const [key, typeDef] of Object.entries(args!)) {
             ret += pad(`$${key}: ${typeDef.type}`, 2)
 
             if (typeDef.nullable === undefined || typeDef.nullable === false) {
@@ -84,7 +84,7 @@ export class Query {
     ret += ' {\n'
 
     this.state.forEach((stateItem, index) => {
-      const { vars, fields, operation } = stateItem
+      const { args, fields, operation } = stateItem
 
       if (index > 0) {
         ret += '\n'
@@ -92,10 +92,10 @@ export class Query {
 
       ret += pad(operation, 2)
 
-      if (vars) {
+      if (args) {
         ret += ' (\n'
 
-        for (const arg of Object.keys(vars)) {
+        for (const arg of Object.keys(args)) {
           ret += pad(`${arg}: $${arg}`, 4)
           ret += '\n'
         }
