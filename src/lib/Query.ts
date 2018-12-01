@@ -90,7 +90,7 @@ export class Query {
     let h = ''
 
     traverse(this.state).nodes().forEach((node: IState) => {
-      if (node instanceof Object && node.args && node.operation && node.fields) {
+      if (node instanceof Object && node.args && node.operation) {
         for (const [key, typeDef] of Object.entries(node.args)) {
           h += pad(`$${key}: ${typeDef.type}`, 2)
 

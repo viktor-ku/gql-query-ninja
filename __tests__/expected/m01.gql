@@ -1,0 +1,7 @@
+mutation (
+  $task: TaskCreateInput!
+) {
+  createTask (
+    task: $task
+  )
+}
