@@ -1,6 +1,6 @@
+import traverse = require('traverse')
 import { last } from './last'
 import { pad } from './pad'
-import { stringifyField } from './stringifyFields'
 import { IDict } from './types'
 
 interface IVar {
@@ -18,7 +18,11 @@ interface IState {
 }
 
 export class Query {
-  private state: IState[] = []
+  get tag() {
+    return 'query'
+  }
+
+  public state: IState[] = []
 
   constructor(opOrOther: string | Query) {
     if (typeof opOrOther === 'string') {
@@ -52,36 +56,9 @@ export class Query {
     return this
   }
 
-  get tag() {
-    return 'query'
-  }
-
   public build(): string {
     let ret = ''
-
-    ret += this.tag
-
-    if (this.state.some((stateItem) => !!stateItem.args)) {
-      ret += ' (\n'
-
-      this.state
-        .filter((stateItem) => !!stateItem.args)
-        .forEach(({ args }) => {
-          for (const [key, typeDef] of Object.entries(args!)) {
-            ret += pad(`$${key}: ${typeDef.type}`, 2)
-
-            if (typeDef.nullable === undefined || typeDef.nullable === false) {
-              ret += '!'
-            }
-
-            ret += '\n'
-          }
-        })
-
-      ret += ')'
-    }
-
-    ret += ' {\n'
+    ret += '{\n'
 
     this.state.forEach((stateItem, index) => {
       const { args, fields, operation } = stateItem
@@ -104,11 +81,58 @@ export class Query {
       }
 
       if (fields) {
-        ret += stringifyField(fields, 2)
+        ret += this.walk(fields, 2)
       }
     })
 
     ret += '\n}\n'
+
+    let h = ''
+
+    traverse(this.state).nodes().forEach((node: IState) => {
+      if (node instanceof Object && node.args && node.operation && node.fields) {
+        for (const [key, typeDef] of Object.entries(node.args)) {
+          h += pad(`$${key}: ${typeDef.type}`, 2)
+
+          if (typeDef.nullable === undefined || typeDef.nullable === false) {
+            h += '!'
+          }
+
+          h += '\n'
+        }
+      }
+    })
+
+    return !!h
+      ? `${this.tag} (\n${h}) ${ret}`
+      : `${this.tag} ${ret}`
+  }
+
+  private walk(fields: IDict, level: number): string {
+    let ret = ' {\n'
+
+    for (const [key, value] of Object.entries(fields)) {
+      ret += pad(key, level * 2)
+
+      if (value instanceof Query) {
+        ret += ' (\n'
+
+        Object.keys(value.state[0].args!).forEach((arg) => {
+          ret += pad(`${arg}: $${arg}\n`, level * 2 + 2)
+        })
+
+        ret += pad(')', level * 2)
+
+        ret += this.walk(value.state[0].fields!, level + 1)
+      } else if (value instanceof Object) {
+        ret += this.walk(value, level + 1)
+      }
+
+      ret += '\n'
+    }
+
+    ret += pad('}', (level * 2) - 2)
+
     return ret
   }
 }

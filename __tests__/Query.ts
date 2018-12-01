@@ -205,30 +205,30 @@ describe('Query', () => {
     expect(combined.build()).toBe(q.q09)
   })
 
-  // test('q10', () => {
-  //   const comments = new Query('comments')
-  //     .vars({
-  //       commentId: {
-  //         type: 'String',
-  //       },
-  //     })
-  //     .fields({
-  //       id: true,
-  //       text: true,
-  //       author: {
-  //         id: true,
-  //         name: true,
-  //       },
-  //     })
+  test('q10', () => {
+    const comments = new Query('comments')
+      .args({
+        commentId: {
+          type: 'String',
+        },
+      })
+      .fields({
+        id: true,
+        text: true,
+        author: {
+          id: true,
+          name: true,
+        },
+      })
 
-  //   const tasks = new Query('tasks')
-  //     .fields({
-  //       id: true,
-  //       name: true,
-  //       desc: true,
-  //       comments,
-  //     })
+    const tasks = new Query('tasks')
+      .fields({
+        id: true,
+        name: true,
+        desc: true,
+        comments,
+      })
 
-  //   expect(tasks.toString()).toBe(q.q10)
-  // })
+    expect(tasks.build()).toBe(q.q10)
+  })
 })
