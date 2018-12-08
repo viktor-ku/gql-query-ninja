@@ -1,5 +1,6 @@
-import { Query } from '../src/main'
-import { loadGql } from './lib/loadGql'
+const t = require('tap')
+const { Query } = require('../dist/main')
+const { loadGql } = require('./lib/loadGql')
 
 const q = {
   q01: loadGql('q01'),
@@ -14,15 +15,17 @@ const q = {
   q10: loadGql('q10'),
 }
 
-describe('Query', () => {
-  test('try to pass empty constructor and throw an error', () => {
-    expect(() => {
+t.test('Query', t => {
+  t.test('try to pass empty constructor and throw an error', t => {
+    t.throw(() => {
       new Query()
-    }).toThrow()
+    })
+
+    t.end()
   })
 
-  test('q01', () => {
-    const actual = new Query('tasks')
+  t.test('q01', t => {
+    const found = new Query('tasks')
       .fields({
         id: true,
         name: true,
@@ -30,11 +33,12 @@ describe('Query', () => {
       })
       .build()
 
-    expect(actual).toBe(q.q01)
+    t.equal(found, q.q01)
+    t.end()
   })
 
-  test('q01 testing Symbol.toPrimitive', () => {
-    const actual = new Query('tasks')
+  t.test('q01 testing Symbol.toPrimitive', t => {
+    const found = new Query('tasks')
       .fields({
         id: true,
         name: true,
@@ -42,11 +46,12 @@ describe('Query', () => {
       })
       .build()
 
-    expect(`${actual}`).toBe(q.q01)
+    t.equal(`${found}`, q.q01)
+    t.end()
   })
 
-  test('q02', () => {
-    const actual = new Query('tasks')
+  t.test('q02', t => {
+    const found = new Query('tasks')
       .fields({
         id: true,
         name: true,
@@ -64,11 +69,12 @@ describe('Query', () => {
       })
       .build()
 
-    expect(actual).toBe(q.q02)
+    t.equal(found, q.q02)
+    t.end()
   })
 
-  test('q03', () => {
-    const actual = new Query('tasks')
+  t.test('q03', t => {
+    const found = new Query('tasks')
       .args({
         taskId: {
           type: 'String',
@@ -81,10 +87,11 @@ describe('Query', () => {
       })
       .build()
 
-    expect(actual).toBe(q.q03)
+    t.equal(found, q.q03)
+    t.end()
   })
 
-  test('q03 from another instance', () => {
+  t.test('q03 from another instance', t => {
     const tasks = new Query('tasks')
       .fields({
         id: true,
@@ -107,13 +114,14 @@ describe('Query', () => {
         },
       })
 
-    expect(tasks.build()).toBe(q.q01)
-    expect(tasksWithInput.build()).toBe(q.q03)
-    expect(tasksWithNestedReturnAndInput.build()).toBe(q.q04)
+    t.equal(tasks.build(), q.q01)
+    t.equal(tasksWithInput.build(), q.q03)
+    t.equal(tasksWithNestedReturnAndInput.build(), q.q04)
+    t.end()
   })
 
-  test('q05 nullable input', () => {
-    const actual = new Query('tasks')
+  t.test('q05 nullable input', t => {
+    const found = new Query('tasks')
       .args({
         query: {
           type: 'TaskQuery',
@@ -127,10 +135,11 @@ describe('Query', () => {
       })
       .build()
 
-    expect(actual).toBe(q.q05)
+    t.equal(found, q.q05)
+    t.end()
   })
 
-  test('q07 merging tasks and users', () => {
+  t.test('q07 merging tasks and users', t => {
     const tasks = new Query('tasks')
       .fields({
         id: true,
@@ -147,10 +156,11 @@ describe('Query', () => {
 
     const combined = tasks.merge(users)
 
-    expect(combined.build()).toBe(q.q07)
+    t.equal(combined.build(), q.q07 )
+    t.end()
   })
 
-  test('q08 merging tasks with input and users', () => {
+  t.test('q08 merging tasks with input and users', t => {
     const tasks = new Query('tasks')
       .args({
         taskId: {
@@ -172,10 +182,11 @@ describe('Query', () => {
 
     const combined = tasks.merge(users)
 
-    expect(combined.build()).toBe(q.q08)
+    t.equal(combined.build(), q.q08)
+    t.end()
   })
 
-  test('q09 merging tasks with input and users with input', () => {
+  t.test('q09 merging tasks with input and users with input', t => {
     const tasks = new Query('tasks')
       .args({
         taskId: {
@@ -202,10 +213,11 @@ describe('Query', () => {
 
     const combined = tasks.merge(users)
 
-    expect(combined.build()).toBe(q.q09)
+    t.equal(combined.build(), q.q09)
+    t.end()
   })
 
-  test('q10', () => {
+  t.test('q10', t => {
     const comments = new Query('comments')
       .args({
         commentId: {
@@ -229,6 +241,9 @@ describe('Query', () => {
         comments,
       })
 
-    expect(tasks.build()).toBe(q.q10)
+    t.equal(tasks.build(), q.q10)
+    t.end()
   })
+
+  t.end()
 })

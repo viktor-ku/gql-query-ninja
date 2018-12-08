@@ -1,7 +1,8 @@
-import * as fs from 'fs'
-import * as path from 'path'
+const fs = require('fs')
+const path = require('path')
 
-export function loadGql(filename: string) {
+exports.loadGql = function loadGql(filename) {
   const filepath = path.resolve(__dirname, '../expected', `${filename}.gql`)
+
   return fs.readFileSync(filepath, 'utf8')
 }
