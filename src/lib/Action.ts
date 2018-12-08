@@ -1,30 +1,16 @@
 import traverse = require('traverse')
+import { IDict, IFields, IState, IVars } from '../types'
 import { last } from './last'
 import { pad } from './pad'
-import { IDict } from './types'
 
-interface IVar {
-  type: string
-  nullable?: boolean
-}
-
-type IFields = IDict<boolean | Query | IDict>
-type IVars = IDict<IVar>
-
-interface IState {
-  operation: string
-  args?: IVars
-  fields?: IFields
-}
-
-export class Query {
-  get tag() {
-    return 'query'
-  }
-
+export class Action {
   public state: IState[] = []
 
-  constructor(opOrOther: string | Query) {
+  get tag() {
+    return ''
+  }
+
+  constructor(opOrOther: string | Action) {
     if (typeof opOrOther === 'string') {
       this.state = [{
         operation: opOrOther,
@@ -41,17 +27,17 @@ export class Query {
     return this.build()
   }
 
-  public args(args: IVars): Query {
+  public args(args: IVars): Action {
     last(this.state).args = args
     return this
   }
 
-  public fields(fields: IFields): Query {
+  public fields(fields: IFields): Action {
     last(this.state).fields = fields
     return this
   }
 
-  public merge(other: Query) {
+  public merge(other: Action) {
     this.state.push(...other.state.map((stateItem) => Object.assign({}, stateItem)))
     return this
   }
@@ -114,7 +100,7 @@ export class Query {
     for (const [key, value] of Object.entries(fields)) {
       ret += pad(key, level * 2)
 
-      if (value instanceof Query) {
+      if (value instanceof Action) {
         ret += ' (\n'
 
         Object.keys(value.state[0].args!).forEach((arg) => {

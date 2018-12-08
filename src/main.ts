@@ -1,9 +1,19 @@
-import { Mutation } from './lib/Mutation'
-import { Query } from './lib/Query'
-import { Subscription } from './lib/Subscription'
+import { Action } from './lib/Action'
 
-export {
-  Query,
-  Mutation,
-  Subscription,
+export class Query extends Action {
+  get tag() {
+    return 'query'
+  }
+}
+
+export class Mutation extends Action {
+  get tag() {
+    return 'mutation'
+  }
+}
+
+export class Subscription extends Action {
+  get tag() {
+    return 'subscription'
+  }
 }

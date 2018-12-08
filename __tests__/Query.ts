@@ -1,4 +1,4 @@
-import { Query } from '../src/lib/Query'
+import { Query } from '../src/main'
 import { loadGql } from './lib/loadGql'
 
 const q = {
