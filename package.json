@@ -8,6 +8,7 @@
     "prepack": "npm run build"
   },
   "main": "./dist/main.js",
+  "types": "./src/main.ts",
   "dependencies": {
     "traverse": "^0.6.6"
   },
