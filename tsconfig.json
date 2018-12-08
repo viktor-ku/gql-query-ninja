@@ -6,9 +6,7 @@
     "strict": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
-    "declarationDir": "types",
-    "declaration": true
+    "strictPropertyInitialization": false
   },
   "exclude": [
     "node_modules",
