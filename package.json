@@ -5,11 +5,9 @@
     "test": "tap test/*.js",
     "build": "tsc",
     "dev": "tsc -w",
-    "prepack": "npm run clean && npm run build",
-    "clean": "rm -rf types dist"
+    "prepack": "npm run build"
   },
   "main": "./dist/main.js",
-  "types": "./types/main.d.ts",
   "dependencies": {
     "traverse": "^0.6.6"
   },
